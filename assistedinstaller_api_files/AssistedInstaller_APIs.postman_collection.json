@@ -1,0 +1,802 @@
+{
+	"info": {
+		"_postman_id": "2c983138-6fc1-46a3-b410-b910f6556eae",
+		"name": "AssistedInstaller_APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ListClusters",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/clusters",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"clusters"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetClusterSupportedPlatforms",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/clusters/{{clusterid}}/supported-platforms",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"clusters",
+						"{{clusterid}}",
+						"supported-platforms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateClusterDefinition",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody).id;",
+							"",
+							"pm.environment.set(\"clusterid\", data);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"ocp4ai\", \"openshift_version\":\"{{openshift_version}}\", \"base_dns_domain\":\"oot.lab.eng.bos.redhat.com\",\"ssh_public_key\":\"{{ssh_public_key}}\",\"pull_secret\":\"{{pull_secret}}\",\"machine_networks\":[{\"cidr\":\"192.168.40.0/24\"}]}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/clusters",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"clusters"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteClusterDefinition",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/clusters/{{clusterid}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"clusters",
+						"{{clusterid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateInfraEnv",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody).id;",
+							"",
+							"pm.environment.set(\"infra_env_id\", data);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"{{clustername}}\", \"image_type\":\"minimal-iso\", \"openshift_version\":\"{{openshift_version}}\", \"pull_secret\": \"{{pull_secret}}\",\"ssh_authorized_key\":\"{{ssh_public_key}}\",\"cluster_id\":\"{{clusterid}}\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/infra-envs",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"infra-envs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteInfraEnv",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/infra-envs/{{infra_env_id}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"infra-envs",
+						"{{infra_env_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListInfraEnv",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"{{clustername}}\", \"image_type\":\"minimal-iso\", \"openshift_version\":\"{{openshift_version}}\", \"pull_secret\": \"{{pull_secret}}\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/infra-envs",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"infra-envs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetDiscoveryImageDownloadURL",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"ocp499\", \"image_type\":\"minimal-iso\", \"openshift_version\":\"4.9.9\", \"pull_secret\": \"{\\\"auths\\\":{\\\"cloud.openshift.com\\\":{\\\"auth\\\":\\\"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K3ZqYXlhcmFtcmVkaGF0Y29tMXl6OGZ4dTNsbHI3Zng5cHJvcGZmdWVxM2Q1OlMwU1BaNFdMRzVCTzFQQTBaVVFCRkNQVzRQOFBKQUEyRFU2U0pMWlNQNkgySjRVWDc2VE1WTDNLRjFMQ0FBU0Y=\\\",\\\"email\\\":\\\"vjayaram@redhat.com\\\"},\\\"quay.io\\\":{\\\"auth\\\":\\\"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K3ZqYXlhcmFtcmVkaGF0Y29tMXl6OGZ4dTNsbHI3Zng5cHJvcGZmdWVxM2Q1OlMwU1BaNFdMRzVCTzFQQTBaVVFCRkNQVzRQOFBKQUEyRFU2U0pMWlNQNkgySjRVWDc2VE1WTDNLRjFMQ0FBU0Y=\\\",\\\"email\\\":\\\"vjayaram@redhat.com\\\"},\\\"registry.connect.redhat.com\\\":{\\\"auth\\\":\\\"NTMyNTc1NTZ8dWhjLTFZejhGWFUzbGxyN2Z4OVBST3BGRnVFUTNENTpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSmtZVFl6WW1NME5UZ3hPVGMwT0dFM09ERTJOV1UzTkRFMU1UVTJObUkxTUNKOS5GZXhUQlN2U1hSbEkxMUlyMERrbGtfdXBrT0RXWXUtczFjR1pJWVNwWGNiVGdPWUJiQmR2UEVha2trYlRmc19NWHBDYjZoUnBBeHNnWWw3emZNOWFkXzRZQmhILVV5SDJrVWNjaUVlMEN4NUVnbnJCaVZfbnNGSzR1Vkt4WEYtdmVSOUFMQ05NZzM3aktTakgtVnJ5MDlTMnlXaFRtYXZoZ3RndHpxbUZ2VXE4MGJ0cFljN0VpOFZaN211eEplYkQ4aWRyN1hRSTZmdnh6Y3VGejlJNGYyWks1a2VxaG1famd2S3J5cWw4NEo1cUZ2dmpoSVVvWjM1YXUzaklSejhEX2VuM2pKeFV3aFdoZk8yNThTejY2dXUyMjdHbV9zTm02VmxabDVzamE1dHVJV2hzVzc3bzQ0ZmNVNVdudzFRcFI4cWVMeEt5UjNpQ1lNZUpseFpQR05QdUNrb193cTVUM1VkOUZXclEzYXNwMHN1MVM0TnoyUEUxWG5yMmUwQ3VPcWdkQ3h5YVpVLXB2eFBGT0U0Y0tyUV9LM3NKd0dPWEpCTDhONFRGLW5ZbjNsNUt3cVdTQVNzUTdZMDhSdU1YWk9yQzlidVRuQTBPSU5WWG5mSTZQT0Z0R2RYYWNOZkpBaWRRMHVmSE5FbmRxRXJJWjlJaS13UWhuQV9yUS1jUVA2VjZOMVBGNlFldlh3MkZtNnVlSWp5eU9nV2dLamZraVFnZHc0TlB1UzMwTlZWcTNVLWk4VWgyeTJHTmtUbVE4THdxQll3ekl1bmhBalRFMHpMcnJaU1NBWjlQXzdaNWwxSjcydmtTckpLOTRjVGFuSGVrbVBCaVFzcjFGeE52R3BWWmctc1VHekxGWERfRG15TFZnSG5xeFhzQzRKLW1Sc3dSWDNwUjVzbw==\\\",\\\"email\\\":\\\"vjayaram@redhat.com\\\"},\\\"registry.redhat.io\\\":{\\\"auth\\\":\\\"NTMyNTc1NTZ8dWhjLTFZejhGWFUzbGxyN2Z4OVBST3BGRnVFUTNENTpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSmtZVFl6WW1NME5UZ3hPVGMwT0dFM09ERTJOV1UzTkRFMU1UVTJObUkxTUNKOS5GZXhUQlN2U1hSbEkxMUlyMERrbGtfdXBrT0RXWXUtczFjR1pJWVNwWGNiVGdPWUJiQmR2UEVha2trYlRmc19NWHBDYjZoUnBBeHNnWWw3emZNOWFkXzRZQmhILVV5SDJrVWNjaUVlMEN4NUVnbnJCaVZfbnNGSzR1Vkt4WEYtdmVSOUFMQ05NZzM3aktTakgtVnJ5MDlTMnlXaFRtYXZoZ3RndHpxbUZ2VXE4MGJ0cFljN0VpOFZaN211eEplYkQ4aWRyN1hRSTZmdnh6Y3VGejlJNGYyWks1a2VxaG1famd2S3J5cWw4NEo1cUZ2dmpoSVVvWjM1YXUzaklSejhEX2VuM2pKeFV3aFdoZk8yNThTejY2dXUyMjdHbV9zTm02VmxabDVzamE1dHVJV2hzVzc3bzQ0ZmNVNVdudzFRcFI4cWVMeEt5UjNpQ1lNZUpseFpQR05QdUNrb193cTVUM1VkOUZXclEzYXNwMHN1MVM0TnoyUEUxWG5yMmUwQ3VPcWdkQ3h5YVpVLXB2eFBGT0U0Y0tyUV9LM3NKd0dPWEpCTDhONFRGLW5ZbjNsNUt3cVdTQVNzUTdZMDhSdU1YWk9yQzlidVRuQTBPSU5WWG5mSTZQT0Z0R2RYYWNOZkpBaWRRMHVmSE5FbmRxRXJJWjlJaS13UWhuQV9yUS1jUVA2VjZOMVBGNlFldlh3MkZtNnVlSWp5eU9nV2dLamZraVFnZHc0TlB1UzMwTlZWcTNVLWk4VWgyeTJHTmtUbVE4THdxQll3ekl1bmhBalRFMHpMcnJaU1NBWjlQXzdaNWwxSjcydmtTckpLOTRjVGFuSGVrbVBCaVFzcjFGeE52R3BWWmctc1VHekxGWERfRG15TFZnSG5xeFhzQzRKLW1Sc3dSWDNwUjVzbw==\\\",\\\"email\\\":\\\"vjayaram@redhat.com\\\"}}}\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/infra-envs/{{infra_env_id}}/downloads/image-url",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"infra-envs",
+						"{{infra_env_id}}",
+						"downloads",
+						"image-url"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetHosts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody)[5];",
+							"",
+							"var inv = data.inventory;",
+							"var hostname = data.requested_hostname;",
+							"",
+							"var data2 = JSON.parse(inv).disks[1].size_bytes;",
+							"",
+							"pm.environment.set(\"disksize\", data2);",
+							"pm.environment.set(\"hostname\", hostname);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"{{clustername}}\", \"image_type\":\"minimal-iso\", \"openshift_version\":\"{{openshift_version}}\", \"pull_secret\": \"{{pull_secret}}\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/infra-envs/{{infra_env_id}}/hosts",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"infra-envs",
+						"{{infra_env_id}}",
+						"hosts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "InstallCluster",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"{{clustername}}\", \"image_type\":\"minimal-iso\", \"openshift_version\":\"{{openshift_version}}\", \"pull_secret\": \"{{pull_secret}}\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/clusters/{{clusterid}}/actions/install",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"clusters",
+						"{{clusterid}}",
+						"actions",
+						"install"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetSupportedOperators",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"ocp499\", \"image_type\":\"minimal-iso\", \"openshift_version\":\"4.9.9\", \"pull_secret\": \"{\\\"auths\\\":{\\\"cloud.openshift.com\\\":{\\\"auth\\\":\\\"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K3ZqYXlhcmFtcmVkaGF0Y29tMXl6OGZ4dTNsbHI3Zng5cHJvcGZmdWVxM2Q1OlMwU1BaNFdMRzVCTzFQQTBaVVFCRkNQVzRQOFBKQUEyRFU2U0pMWlNQNkgySjRVWDc2VE1WTDNLRjFMQ0FBU0Y=\\\",\\\"email\\\":\\\"vjayaram@redhat.com\\\"},\\\"quay.io\\\":{\\\"auth\\\":\\\"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K3ZqYXlhcmFtcmVkaGF0Y29tMXl6OGZ4dTNsbHI3Zng5cHJvcGZmdWVxM2Q1OlMwU1BaNFdMRzVCTzFQQTBaVVFCRkNQVzRQOFBKQUEyRFU2U0pMWlNQNkgySjRVWDc2VE1WTDNLRjFMQ0FBU0Y=\\\",\\\"email\\\":\\\"vjayaram@redhat.com\\\"},\\\"registry.connect.redhat.com\\\":{\\\"auth\\\":\\\"NTMyNTc1NTZ8dWhjLTFZejhGWFUzbGxyN2Z4OVBST3BGRnVFUTNENTpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSmtZVFl6WW1NME5UZ3hPVGMwT0dFM09ERTJOV1UzTkRFMU1UVTJObUkxTUNKOS5GZXhUQlN2U1hSbEkxMUlyMERrbGtfdXBrT0RXWXUtczFjR1pJWVNwWGNiVGdPWUJiQmR2UEVha2trYlRmc19NWHBDYjZoUnBBeHNnWWw3emZNOWFkXzRZQmhILVV5SDJrVWNjaUVlMEN4NUVnbnJCaVZfbnNGSzR1Vkt4WEYtdmVSOUFMQ05NZzM3aktTakgtVnJ5MDlTMnlXaFRtYXZoZ3RndHpxbUZ2VXE4MGJ0cFljN0VpOFZaN211eEplYkQ4aWRyN1hRSTZmdnh6Y3VGejlJNGYyWks1a2VxaG1famd2S3J5cWw4NEo1cUZ2dmpoSVVvWjM1YXUzaklSejhEX2VuM2pKeFV3aFdoZk8yNThTejY2dXUyMjdHbV9zTm02VmxabDVzamE1dHVJV2hzVzc3bzQ0ZmNVNVdudzFRcFI4cWVMeEt5UjNpQ1lNZUpseFpQR05QdUNrb193cTVUM1VkOUZXclEzYXNwMHN1MVM0TnoyUEUxWG5yMmUwQ3VPcWdkQ3h5YVpVLXB2eFBGT0U0Y0tyUV9LM3NKd0dPWEpCTDhONFRGLW5ZbjNsNUt3cVdTQVNzUTdZMDhSdU1YWk9yQzlidVRuQTBPSU5WWG5mSTZQT0Z0R2RYYWNOZkpBaWRRMHVmSE5FbmRxRXJJWjlJaS13UWhuQV9yUS1jUVA2VjZOMVBGNlFldlh3MkZtNnVlSWp5eU9nV2dLamZraVFnZHc0TlB1UzMwTlZWcTNVLWk4VWgyeTJHTmtUbVE4THdxQll3ekl1bmhBalRFMHpMcnJaU1NBWjlQXzdaNWwxSjcydmtTckpLOTRjVGFuSGVrbVBCaVFzcjFGeE52R3BWWmctc1VHekxGWERfRG15TFZnSG5xeFhzQzRKLW1Sc3dSWDNwUjVzbw==\\\",\\\"email\\\":\\\"vjayaram@redhat.com\\\"},\\\"registry.redhat.io\\\":{\\\"auth\\\":\\\"NTMyNTc1NTZ8dWhjLTFZejhGWFUzbGxyN2Z4OVBST3BGRnVFUTNENTpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSmtZVFl6WW1NME5UZ3hPVGMwT0dFM09ERTJOV1UzTkRFMU1UVTJObUkxTUNKOS5GZXhUQlN2U1hSbEkxMUlyMERrbGtfdXBrT0RXWXUtczFjR1pJWVNwWGNiVGdPWUJiQmR2UEVha2trYlRmc19NWHBDYjZoUnBBeHNnWWw3emZNOWFkXzRZQmhILVV5SDJrVWNjaUVlMEN4NUVnbnJCaVZfbnNGSzR1Vkt4WEYtdmVSOUFMQ05NZzM3aktTakgtVnJ5MDlTMnlXaFRtYXZoZ3RndHpxbUZ2VXE4MGJ0cFljN0VpOFZaN211eEplYkQ4aWRyN1hRSTZmdnh6Y3VGejlJNGYyWks1a2VxaG1famd2S3J5cWw4NEo1cUZ2dmpoSVVvWjM1YXUzaklSejhEX2VuM2pKeFV3aFdoZk8yNThTejY2dXUyMjdHbV9zTm02VmxabDVzamE1dHVJV2hzVzc3bzQ0ZmNVNVdudzFRcFI4cWVMeEt5UjNpQ1lNZUpseFpQR05QdUNrb193cTVUM1VkOUZXclEzYXNwMHN1MVM0TnoyUEUxWG5yMmUwQ3VPcWdkQ3h5YVpVLXB2eFBGT0U0Y0tyUV9LM3NKd0dPWEpCTDhONFRGLW5ZbjNsNUt3cVdTQVNzUTdZMDhSdU1YWk9yQzlidVRuQTBPSU5WWG5mSTZQT0Z0R2RYYWNOZkpBaWRRMHVmSE5FbmRxRXJJWjlJaS13UWhuQV9yUS1jUVA2VjZOMVBGNlFldlh3MkZtNnVlSWp5eU9nV2dLamZraVFnZHc0TlB1UzMwTlZWcTNVLWk4VWgyeTJHTmtUbVE4THdxQll3ekl1bmhBalRFMHpMcnJaU1NBWjlQXzdaNWwxSjcydmtTckpLOTRjVGFuSGVrbVBCaVFzcjFGeE52R3BWWmctc1VHekxGWERfRG15TFZnSG5xeFhzQzRKLW1Sc3dSWDNwUjVzbw==\\\",\\\"email\\\":\\\"vjayaram@redhat.com\\\"}}}\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/supported-operators",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"supported-operators"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetClusterPreflightReqs",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/clusters/{{clusterid}}/preflight-requirements",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"clusters",
+						"{{clusterid}}",
+						"preflight-requirements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetEvents",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/events?cluster_id={{clusterid}}&infra_env_id={{infra_env_id}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"events"
+					],
+					"query": [
+						{
+							"key": "cluster_id",
+							"value": "{{clusterid}}"
+						},
+						{
+							"key": "infra_env_id",
+							"value": "{{infra_env_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CompleteClusterInstall",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/clusters/{{clusterid}}/actions/complete-installation",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"clusters",
+						"{{clusterid}}",
+						"actions",
+						"complete-installation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeRegisterHost",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/infra-envs/{{infra_env_id}}/hosts/{{host_id}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"infra-envs",
+						"{{infra_env_id}}",
+						"hosts",
+						"{{host_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetClusterCredentials",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/clusters/{{clusterid}}/credentials",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"clusters",
+						"{{clusterid}}",
+						"credentials"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DownloadClusterKubeConfig",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/clusters/{{clusterid}}/downloads/credentials?file_name=kubeconfig",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"clusters",
+						"{{clusterid}}",
+						"downloads",
+						"credentials"
+					],
+					"query": [
+						{
+							"key": "file_name",
+							"value": "kubeconfig"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DownloadClusterKubeadminPassword",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openshift.com/api/assisted-install/v2/clusters/{{clusterid}}/downloads/credentials?file_name=kubeadmin-password",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openshift",
+						"com"
+					],
+					"path": [
+						"api",
+						"assisted-install",
+						"v2",
+						"clusters",
+						"{{clusterid}}",
+						"downloads",
+						"credentials"
+					],
+					"query": [
+						{
+							"key": "file_name",
+							"value": "kubeadmin-password"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "JWT_TOKEN",
+			"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICItNGVsY19WZE5fV3NPVVlmMkc0UXhyOEdjd0l4X0t0WFVDaXRhdExLbEx3In0.eyJleHAiOjE2NDI4MDUyNDcsImlhdCI6MTY0MjgwNDM0NywiYXV0aF90aW1lIjoxNjQyNzgwMzQ2LCJqdGkiOiJlYTMyOGNkZC1lYTYyLTQ0MmYtOGMyMC0yOTA4OThkYmQ3NTUiLCJpc3MiOiJodHRwczovL3Nzby5yZWRoYXQuY29tL2F1dGgvcmVhbG1zL3JlZGhhdC1leHRlcm5hbCIsImF1ZCI6ImNsb3VkLXNlcnZpY2VzIiwic3ViIjoiZjo1MjhkNzZmZi1mNzA4LTQzZWQtOGNkNS1mZTE2ZjRmZTBjZTY6dmpheWFyYW1AcmVkaGF0LmNvbSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImNsb3VkLXNlcnZpY2VzIiwibm9uY2UiOiI4MTJlN2UzZS1lMWNmLTRjY2QtODJmNS1iY2M1NDdmMTgxMjEiLCJzZXNzaW9uX3N0YXRlIjoiNDA3NzFiYWItNzZmMC00MjRiLTkzZjgtYTI4OTI5MGFhYWZkIiwiYWNyIjoiMCIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwczovL3Byb2QuZm9vLnJlZGhhdC5jb206MTMzNyIsImh0dHBzOi8vcWFwcm9kYXV0aC5jb25zb2xlLnJlZGhhdC5jb20iLCJodHRwczovL2dvdi5jb25zb2xlLnJlZGhhdC5jb20iLCJodHRwczovL3FhcHJvZGF1dGguZm9vLnJlZGhhdC5jb20iLCJodHRwczovL2FwaS5jbG91ZC5yZWRoYXQuY29tIiwiaHR0cHM6Ly9xYXByb2RhdXRoLmNsb3VkLnJlZGhhdC5jb20iLCJodHRwczovL2Nsb3VkLm9wZW5zaGlmdC5jb20iLCJodHRwczovL3Byb2QuZm9vLnJlZGhhdC5jb20iLCJodHRwczovL2Nsb3VkLnJlZGhhdC5jb20iLCJodHRwczovL2NvbnNvbGUucmVkaGF0LmNvbSJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiYXV0aGVudGljYXRlZCIsInBvcnRhbF9tYW5hZ2Vfc3Vic2NyaXB0aW9ucyIsIm9mZmxpbmVfYWNjZXNzIiwiYWRtaW46b3JnOmFsbCIsInBvcnRhbF9tYW5hZ2VfY2FzZXMiLCJwb3J0YWxfc3lzdGVtX21hbmFnZW1lbnQiLCJwb3J0YWxfZG93bmxvYWQiXX0sInNjb3BlIjoib3BlbmlkIG9mZmxpbmVfYWNjZXNzIiwic2lkIjoiNDA3NzFiYWItNzZmMC00MjRiLTkzZjgtYTI4OTI5MGFhYWZkIiwiYWNjb3VudF9udW1iZXIiOiI2NTIwMTE5IiwiaXNfaW50ZXJuYWwiOnRydWUsImlzX2FjdGl2ZSI6dHJ1ZSwibGFzdF9uYW1lIjoiSmF5YXJhbWFuIiwicHJlZmVycmVkX3VzZXJuYW1lIjoidmpheWFyYW1AcmVkaGF0LmNvbSIsInR5cGUiOiJVc2VyIiwibG9jYWxlIjoiZW5fVVMiLCJpc19vcmdfYWRtaW4iOnRydWUsImFjY291bnRfaWQiOiI1MzI1NzU1NiIsIm9yZ19pZCI6IjEzMTI1NDM5IiwiZmlyc3RfbmFtZSI6IlZpc2h3YW5hdGgiLCJlbWFpbCI6InZqYXlhcmFtQHJlZGhhdC5jb20iLCJ1c2VybmFtZSI6InZqYXlhcmFtQHJlZGhhdC5jb20ifQ.gD7QP8KG2Gxek1OzP8LsIgISWyyFWjJeFOzKFwuj3ZMslYND_UvZgcwu7d2PTNAvKcWdEKBnYH7TqR0vML_50h_fIg3Cl1Hezag3lbNZajXmatRTbqlIT2AtjQis-OMpR979qss1-DEMoElYq7WBj6b-MDrNL-b2LznM8yKlXZhv5I7_J2RTHZqBNY-V7MOo3D1loeGfqRiOP4pAfkQEfY4oQXzly4NkLHhhhTd98TuADXpDqCpS6stDvq9umIAVZ_0DJuG2pWNZWikiQnr89ZW2j5-Ox7JIjMBw2h1SpdHEGr11wfwMFXobgXPIJGcq0o6ZOQg2It17iuTvdmjhTItH0KCQ1-VJ6x4tw28ygtx1YzEZAosfldQYHra24OSq6c_rU2UejwrjijPtu9dNDzkqEsy0X0bbZlOk0yTiQaLsN27769K64GFTlEiq7gZIGs--Uyilq9xwwz33uLQ7Vzrh9qHEi_dk586Nw-4mnHvB6S-BjjD706BsF91kuKAKx6PTOgv2tb9u1t0DsYMkRERNTku5Nu4AK9MWxvsr4EYg6m5YQxScdnJ90_s6tvNoLiFcIck8mhchp_tASSjRNrgS6xTzTjjVA3H_A3POSZvn-3E13eiFxErVE7M5__b2UfkPD6ZRaDfbObUoLe6s5dZMxlcT0oCdKU3Rm5hETdc"
+		}
+	]
+}
