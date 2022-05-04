@@ -1,0 +1,17 @@
+---
+- name: Download and apply kubernetes yaml manifests for the ODF operator
+  hosts: localhost
+
+  tasks:
+  - name: Download creation of openshift-storage namespace, openshift-storage-operatorgroup OperatorGroup and odf-operator subsciption yaml manifest file from github repo
+    ansible.builtin.get_url:
+      url: https://raw.githubusercontent.com/redhat-eets/cp4na/main/odf_operator/04_namespace_og_subs_openshift_storage_operator.yaml
+      dest: /home/odf_yaml_files/04_namespace_og_subs_openshift_storage_operator.yaml
+      mode: '0664'
+
+
+  - name: Apply creation of openshift-storage namespace, openshift-storage-operatorgroup OperatorGroup and odf-operator subsciption yaml manifest file
+    kubernetes.core.k8s:
+      state: present
+      src: /home/odf_yaml_files/04_namespace_og_subs_openshift_storage_operator.yaml
+

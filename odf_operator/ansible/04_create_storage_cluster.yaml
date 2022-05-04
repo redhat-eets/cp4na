@@ -1,0 +1,16 @@
+---
+- name: Download and apply kubernetes yaml manifests to create the StorageCluster resource
+  hosts: localhost
+
+  tasks:
+  - name: Download creation of StorageCluster resource yaml manifest file from github repo
+    ansible.builtin.get_url:
+      url: https://raw.githubusercontent.com/redhat-eets/cp4na/main/odf_operator/06_create_storage_cluster.yaml
+      dest: /home/odf_yaml_files/06_create_storage_cluster.yaml
+      mode: '0664'
+
+
+  - name: Apply creation of StorageCluster resource yaml manifest file
+    kubernetes.core.k8s:
+      state: present
+      src: /home/odf_yaml_files/06_create_storage_cluster.yaml

@@ -1,3 +1,5 @@
+#YAML Manifest to create a StorageSystem resource within the openshift-storage namespace
+
 apiVersion: odf.openshift.io/v1alpha1
 kind: StorageSystem
 metadata:

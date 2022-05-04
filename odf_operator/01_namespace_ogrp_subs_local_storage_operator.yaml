@@ -1,0 +1,32 @@
+#YAML Manifest to create the openshift-local-storage namespace
+
+apiVersion: v1
+kind: Namespace
+metadata:
+ name: openshift-local-storage
+spec: {}
+---
+#YAML Manifest to create the local-operator-group OperatorGroup resource
+
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+ name: local-operator-group
+ namespace: openshift-local-storage
+spec:
+ targetNamespaces:
+ - openshift-local-storage
+---
+#YAML Manifest to create the subscription to the Local Storage operator
+
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+ name: local-storage-operator
+ namespace: openshift-local-storage
+spec:
+ channel: "4.10"
+ installPlanApproval: Automatic
+ name: local-storage-operator
+ source: redhat-operators
+ sourceNamespace: openshift-marketplace

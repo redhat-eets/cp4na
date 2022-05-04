@@ -1,0 +1,13 @@
+---
+- name: Install necessary modules as part of pre-requirements
+  hosts: localhost
+
+  tasks:
+  - name: Install kubernetes Python module
+    pip:
+      name: kubernetes
+
+  - name: Install OpenShift Python module
+    pip:
+      name: openshift
+~                       

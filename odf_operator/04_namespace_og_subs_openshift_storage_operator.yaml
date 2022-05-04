@@ -1,0 +1,34 @@
+#YAML Manifest to create the openshift-storage namespace
+
+apiVersion: v1
+kind: Namespace
+metadata:
+ labels:
+   openshift.io/cluster-monitoring: "true"
+ name: openshift-storage
+spec: {}
+---
+#YAML Manifest to create the openshift-storage-operatorgroup OperatorGroup
+
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+ name: openshift-storage-operatorgroup
+ namespace: openshift-storage
+spec:
+ targetNamespaces:
+ - openshift-storage
+---
+#YAML Manifest to create the subscription to the ODF operator
+
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+ name: odf-operator
+ namespace: openshift-storage
+spec:
+ channel: "stable-4.10"
+ installPlanApproval: Automatic
+ name: odf-operator
+ source: redhat-operators
+ sourceNamespace: openshift-marketplace

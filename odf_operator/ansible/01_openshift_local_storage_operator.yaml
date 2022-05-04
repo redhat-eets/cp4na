@@ -1,0 +1,68 @@
+---
+- name: Download and apply kubernetes yaml manifests for the openshift-local-storage operator
+  hosts: localhost
+
+  tasks:
+  - name: Check if /home/odf_yaml_files directory exists and create it if it doesn't exist
+    ansible.builtin.file:
+      path: /home/odf_yaml_files
+      state: directory
+      mode: '0755'
+
+  - name: Download creation of openshift-local-storage namespace, local-operator-group OperatorGroup and openshift-local-operator subscription yaml manifest file from github repo
+    ansible.builtin.get_url:
+      url: https://raw.githubusercontent.com/redhat-eets/cp4na/main/odf_operator/01_namespace_ogrp_subs_local_storage_operator.yaml
+      dest: /home/odf_yaml_files/01_namespace_ogrp_subs_local_storage_operator.yaml
+      mode: '0664'
+
+
+  - name: Apply creation of openshift-local-storage namespace, local-operator-group OperatorGroup and openshift-local-operator subscription yaml manifest file
+    kubernetes.core.k8s:
+      state: present
+      src: /home/odf_yaml_files/01_namespace_ogrp_subs_local_storage_operator.yaml
+
+
+  - name: Acquire the list of all worker nodes by querying using label_selectors
+    kubernetes.core.k8s_info:
+      kind: Node
+      label_selectors:
+        - node-role.kubernetes.io/worker
+    register: worker_node_list
+
+
+  - name: Add the cluster.ocs.openshift.io/openshift-storage label to all the worker nodes
+    kubernetes.core.k8s:
+      definition:
+         apiVersion: v1
+         kind: Node
+         metadata:
+            name: "{{ item.metadata.name }}"
+            labels:
+              'cluster.ocs.openshift.io/openshift-storage': ""
+    with_items: "{{ worker_node_list.resources }}"
+
+
+  - name: Download creation of auto-discover-devices LocalVolumeDiscovery resource yaml manifest file from github repo
+    ansible.builtin.get_url:
+      url: https://raw.githubusercontent.com/redhat-eets/cp4na/main/odf_operator/02_localvolumediscovery_auto_discover_devices.yaml
+      dest: /home/odf_yaml_files/02_localvolumediscovery_auto_discover_devices.yaml
+      mode: '0664'
+
+
+  - name: Apply creation of auto-discover-devices LocalVolumeDiscovery resource yaml manifest file to auto-discover the labelled nodes
+    kubernetes.core.k8s:
+      state: present
+      src: /home/odf_yaml_files/02_localvolumediscovery_auto_discover_devices.yaml
+
+
+  - name: Download creation of local-block LocalVolumeSet resource yaml manifest file from github repo
+    ansible.builtin.get_url:
+      url: https://raw.githubusercontent.com/redhat-eets/cp4na/main/odf_operator/03_create_localvolume_set.yaml
+      dest: /home/odf_yaml_files/03_create_localvolume_set.yaml
+      mode: '0664'
+
+
+  - name: Apply creation of local-block LocalVolumeSet resource yaml manifest file
+    kubernetes.core.k8s:
+      state: present
+      src: /home/odf_yaml_files/03_create_localvolume_set.yaml
