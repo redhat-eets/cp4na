@@ -92,6 +92,7 @@ kind: ConfigMap
 metadata:
   creationTimestamp: null
   name: ldapusers
+  namespace: default
 ---
   apiVersion: apps/v1
   kind: Deployment
@@ -99,6 +100,7 @@ metadata:
     labels:
       app: openldap
     name: openldap
+    namespace: default
   spec:
     replicas: 1
     selector:
@@ -164,6 +166,7 @@ metadata:
     labels:
       app: openldap
     name: openldap
+    namespace: default
   spec:
     type: NodePort
     ports:
