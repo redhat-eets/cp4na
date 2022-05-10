@@ -3,4 +3,4 @@ kind: MultiClusterHub
 metadata:
   name: multiclusterhub
   namespace: open-cluster-management
-spec: {}
+
