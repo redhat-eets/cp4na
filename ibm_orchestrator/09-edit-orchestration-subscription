@@ -1,4 +1,0 @@
-Execute the below command to set the install plan approval to be `Manual` from `Automatic` once the orchestration instance has been successfully created and is Ready.
-
-
-    `oc edit sub ibm-tnc-orchestration-subscription -n ibmcp4na`

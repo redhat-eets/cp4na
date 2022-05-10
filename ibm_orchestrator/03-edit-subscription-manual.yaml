@@ -1,0 +1,8 @@
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: ibm-tnc-orchestration-subscription
+  namespace: {{ cp4na_ns }}
+spec:
+  installPlanApproval: {{ ip_approval_method }}

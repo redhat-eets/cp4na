@@ -1,4 +1,0 @@
-Execute the below oc command to create a secret that will hold the ibm-entitlement-key. Note: replace the <> with actual IBM entitlement key from https://myibm.ibm.com/products-services/containerlibrary 
-
-
-  `oc create secret docker-registry ibm-entitlement-key --docker-username=cp --docker-password=<entitlement-key> --docker-server=cp.icr.io --namespace=ibmcp4na`

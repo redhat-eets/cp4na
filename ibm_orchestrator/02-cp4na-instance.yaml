@@ -1,9 +1,10 @@
+---
 apiVersion: tnc.ibm.com/v1beta1
 kind: Orchestration
 metadata:
   name: tnco
-  namespace: ibmcp4na
+  namespace: {{ cp4na_ns }}
 spec:
   license:
     accept: true
-  version: 2.2.2
+  version: {{ ver }}
