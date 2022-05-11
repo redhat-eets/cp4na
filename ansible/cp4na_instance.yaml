@@ -1,0 +1,11 @@
+---
+- name: cp4na operator install playbook
+  hosts: localhost
+  roles:
+    - role: cp4na_operator_instance
+      vars:
+        ansible_work_dir: /ansible
+        cp4na_ns: ibmcp4na
+        file_dest_dir: /home/cp4na_yaml_files
+        role_name: cp4na_operator_instance
+        ver: 2.2.2

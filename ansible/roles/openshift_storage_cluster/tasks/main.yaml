@@ -1,0 +1,18 @@
+- name: Check if the "{{ file_dest_dir }}" directory exists and create it if it doesn't exist
+  ansible.builtin.file:
+    path: "{{ file_dest_dir }}"
+    state: directory
+    mode: '0755'
+
+
+- name: Download creation of storage cluster resource yaml manifest file from github repo
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/redhat-eets/cp4na/main/odf_operator/07_create_storage_cluster.yaml
+    dest: "{{ file_dest_dir }}/07_create_storage_cluster.yaml"
+    mode: '0664'
+
+
+- name: Apply creation of creation of storage cluster resource
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ file_dest_dir }}/07_create_storage_cluster.yaml"

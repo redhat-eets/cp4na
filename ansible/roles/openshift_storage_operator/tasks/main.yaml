@@ -1,0 +1,32 @@
+- name: Check if "{{ file_dest_dir }}" directory exists and create it if it doesn't exist
+  ansible.builtin.file:
+    path: "{{ file_dest_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Check if the "{{ ansible_work_dir }}/roles/{{ role_name }}/templates" directory exists and create it if it doesn't exist
+  ansible.builtin.file:
+    path: "{{ ansible_work_dir }}/roles/{{ role_name }}/templates"
+    state: directory
+    mode: '0755'
+
+
+- name: Download creation of openshift-storage namespace, openshift-storage-operatorgroup OperatorGroup and odf-operator subsciption yaml manifest file template from github repo
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/redhat-eets/cp4na/main/odf_operator/05_namespace_og_subs_openshift_storage_operator.yaml
+    dest: "{{ ansible_work_dir }}/roles/{{ role_name }}/templates/05_namespace_og_subs_openshift_storage_operator.j2"
+    mode: '0664'
+
+
+- name: Creation of openshift-storage namespace, openshift-storage-operatorgroup OperatorGroup and odf-operator subsciption yaml manifest file from template
+  template:
+    src: "{{ ansible_work_dir }}/roles/{{ role_name }}/templates/05_namespace_og_subs_openshift_storage_operator.j2"
+    dest: "{{ file_dest_dir }}/05_namespace_og_subs_openshift_storage_operator.yaml"
+
+
+
+- name: Apply creation of openshift-storage namespace, openshift-storage-operatorgroup OperatorGroup and odf-operator subsciption yaml manifest file
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ file_dest_dir }}/05_namespace_og_subs_openshift_storage_operator.yaml"
+

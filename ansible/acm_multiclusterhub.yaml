@@ -1,0 +1,7 @@
+---
+- name: ACM muliclusterhub creation playbook
+  hosts: localhost
+  roles:
+    - role: acm_multiclusterhub
+      vars:
+       file_dest_dir: /home/acm_yaml_files    

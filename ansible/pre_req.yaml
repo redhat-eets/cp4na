@@ -1,0 +1,12 @@
+---
+- name: Download and apply kubernetes yaml manifests locally
+  hosts: localhost
+
+  tasks:
+  - name: Install kubernetes Python module
+    pip:
+      name: kubernetes
+
+  - name: Install OpenShift Python module
+    pip:
+      name: openshift

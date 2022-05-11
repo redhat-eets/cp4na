@@ -1,0 +1,7 @@
+---
+- name: Set default storage class playbook
+  hosts: localhost
+  roles:
+    - role: default_storage_class
+      vars:
+        file_dest_dir: /home/ODF_yaml_files

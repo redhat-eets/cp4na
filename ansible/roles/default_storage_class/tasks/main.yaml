@@ -1,0 +1,18 @@
+- name: Check if the "{{ file_dest_dir }}" directory exists and create it if it doesn't exist
+  ansible.builtin.file:
+    path: "{{ file_dest_dir }}"
+    state: directory
+    mode: '0755'
+
+
+- name: Download default storage class yaml manifest file from github repo
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/redhat-eets/cp4na/main/odf_operator/08_default_storage_class.yaml
+    dest: "{{ file_dest_dir }}/08_default_storage_class.yaml"
+    mode: '0664'
+
+
+- name: Apply default storage class
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ file_dest_dir }}/08_default_storage_class.yaml"

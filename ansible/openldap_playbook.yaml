@@ -1,0 +1,11 @@
+---
+- name: openldap install playbook
+  hosts: localhost
+  roles:
+    - role: openldap
+      vars:
+        ansible_work_dir: /ansible
+        file_dest_dir: /home/openldap_yaml_files
+        # Run the command `oc create secret docker-registry docker --docker-username=<docker-username> --docker-password=<docker-token> --docker-email=<email-associated-with-docker-account> --dry-run=client -o yaml` and input the value of the field data[.dockerconfigjson] from the resulting output below
+        docker_json: <insert value from data[.dockerconfigjson]>
+        role_name: openldap

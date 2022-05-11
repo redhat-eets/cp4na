@@ -1,0 +1,13 @@
+---
+- name: Download creation of ACM multiclusterhub yaml manifest template file
+  ansible.builtin.get_url:
+   url: https://raw.githubusercontent.com/redhat-eets/cp4na/main/acm/2.4/02-multiclusterhub-instance-acm.yaml
+   dest: "{{ file_dest_dir }}/02-multiclusterhub-instance-acm.yaml"
+   mode: '0664'
+
+
+- name: Apply creation of ACM multiclusterhub yaml manifest file
+  kubernetes.core.k8s:
+   state: present
+   src: "{{ file_dest_dir }}/02-multiclusterhub-instance-acm.yaml"
+

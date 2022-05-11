@@ -1,0 +1,10 @@
+---
+- name: OpenShift ODF storage operator install playbook
+  hosts: localhost
+  roles:
+    - role: openshift_storage_operator
+      vars:
+        ansible_work_dir: /ansible
+        channel_version: stable-4.10
+        file_dest_dir: /home/ODF_yaml_files
+        role_name: openshift_storage_operator

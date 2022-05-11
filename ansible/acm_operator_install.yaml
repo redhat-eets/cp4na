@@ -1,0 +1,11 @@
+---
+- name: ACM operator install playbook
+  hosts: localhost
+  roles:
+    - role: acm_operator_install
+      vars:
+       ansible_work_dir: /ansible
+       channel_version : release-2.4
+       file_dest_dir: /home/acm_yaml_files
+       role_name: acm_operator_install
+

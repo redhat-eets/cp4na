@@ -1,0 +1,7 @@
+---
+- name: OpenShift ODF storage cluster creation playbook
+  hosts: localhost
+  roles:
+    - role: openshift_storage_cluster
+      vars:
+        file_dest_dir: /home/ODF_yaml_files

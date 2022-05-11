@@ -1,0 +1,84 @@
+
+- name: Check if the "{{ file_dest_dir }}" directory exists and create it if it doesn't exist
+  ansible.builtin.file:
+    path: "{{ file_dest_dir }}"
+    state: directory
+    mode: '0755'
+
+
+- name: Check if the "{{ ansible_work_dir }}/roles/{{ role_name }}/templates" directory exists and create it if it doesn't exist
+  ansible.builtin.file:
+    path: "{{ ansible_work_dir }}/roles/{{ role_name }}/templates"
+    state: directory
+    mode: '0755'
+
+
+- name: Download creation of openshift-local-storage namespace, local-operator-group OperatorGroup and openshift-local-operator subscription yaml manifest file template from github repo
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/redhat-eets/cp4na/main/odf_operator/01_namespace_ogrp_subs_local_storage_operator.yaml
+    dest: "{{ ansible_work_dir }}/roles/{{ role_name }}/templates/01_namespace_ogrp_subs_local_storage_operator.j2"
+    mode: '0664'
+
+
+- name: Creation of openshift-local-storage namespace, local-operator-group OperatorGroup and openshift-local-operator subscription yaml manifest file from template
+  template:
+    src: "{{ ansible_work_dir }}/roles/{{ role_name }}/templates/01_namespace_ogrp_subs_local_storage_operator.j2"
+    dest: "{{ file_dest_dir }}/01_namespace_ogrp_subs_local_storage_operator.yaml"
+
+
+- name: Apply creation of openshift-local-storage namespace, local-operator-group OperatorGroup and openshift-local-operator subscription
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ file_dest_dir }}/01_namespace_ogrp_subs_local_storage_operator.yaml"
+
+
+
+- name: Download worker node labeling yaml manifest template file from github repo
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/redhat-eets/cp4na/main/odf_operator/02_label_worker_nodes.yaml
+    dest: "{{ ansible_work_dir }}/roles/{{ role_name }}/templates/02_label_worker_nodes.j2"
+    mode: '0664'
+
+
+- name: Acquire list of worker nodes
+  kubernetes.core.k8s_info:
+    kind: Node
+    label_selectors:
+      - node-role.kubernetes.io/worker
+  register: worker_node_list
+
+
+- name: create list of worker node names
+  set_fact:
+    worker_names: "{{ worker_names|default([]) + [item.metadata.name] }}"
+  with_items: "{{ worker_node_list.resources }}"
+
+
+- name: Create worker node label yaml manifest files from template
+  template:
+    src: "{{ ansible_work_dir }}/roles/{{ role_name }}/templates/02_label_worker_nodes.j2"
+    dest: "{{ file_dest_dir }}/{{ item }}.yaml"
+  with_items: "{{ worker_names }}"
+ 
+
+- name: Apply worker node labels
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ file_dest_dir }}/{{ item }}.yaml"
+  with_items: "{{ worker_names }}"
+
+
+
+- name: Download creation of auto-discover-devices LocalVolumeDiscovery resource yaml manifest file from github repo
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/redhat-eets/cp4na/main/odf_operator/03_localvolumediscovery_auto_discover_devices.yaml
+    dest: "{{ file_dest_dir }}/03_localvolumediscovery_auto_discover_devices.yaml"
+    mode: '0664'
+
+
+- name: Apply creation of auto-discover-devices LocalVolumeDiscovery resource yaml manifest file to auto-discover the labelled nodes
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ file_dest_dir }}/03_localvolumediscovery_auto_discover_devices.yaml"
+
+

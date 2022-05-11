@@ -1,0 +1,7 @@
+---
+- name: OpenShift local storage operator's local volume set creation playbook
+  hosts: localhost
+  roles:
+    - role: openshift_lso_volume_set
+      vars:
+        file_dest_dir: /home/ODF_yaml_files

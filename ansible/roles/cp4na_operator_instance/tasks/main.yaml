@@ -1,0 +1,33 @@
+---
+- name: Check if the "{{ file_dest_dir }}" directory exists and create it if it doesn't exist
+  ansible.builtin.file:
+    path: "{{ file_dest_dir }}"
+    state: directory
+    mode: '0755'
+
+
+- name: Check if the "{{ ansible_work_dir }}/roles/{{ role_name }}/templates" directory exists and create it if it doesn't exist
+  ansible.builtin.file:
+    path: "{{ ansible_work_dir }}/roles/{{ role_name }}/templates"
+    state: directory
+    mode: '0755'
+
+
+- name: Download IBM CP4NA operator instance creation yaml manifest template file
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/redhat-eets/cp4na/main/ibm_orchestrator/02-cp4na-instance.yaml
+    dest: "{{ ansible_work_dir }}/roles/{{ role_name }}/templates/02-cp4na-instance.j2"
+    mode: '0664'
+
+
+- name: Create IBM CP4NA operator instance creation yaml manifest file from template file
+  template:
+    src: "{{ ansible_work_dir }}/roles/{{ role_name }}/templates/02-cp4na-instance.j2"
+    dest: "{{ file_dest_dir }}/02-cp4na-instance.yaml"
+
+
+
+- name: Apply IBM CP4NA operator instance creation yaml manifest file
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ file_dest_dir }}/02-cp4na-instance.yaml"

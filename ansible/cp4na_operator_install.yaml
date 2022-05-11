@@ -1,0 +1,20 @@
+---
+- name: cp4na operator install playbook
+  hosts: localhost
+  roles:
+    - role: cp4na_operator_install
+      vars:
+        ansible_work_dir: /ansible
+        channel_version : v2.2 
+        cp4na_ns: ibmcp4na
+        file_dest_dir: /home/cp4na_yaml_files
+        # Run the command `oc create secret docker-registry ibm-entitlement-key --docker-username=cp --docker-password=<entitlement-key> --docker-server=cp.icr.io --namespace=ibmcp4na --dry-run=client -o yaml' and input the data[.dockerconfigjson] field value from resulting output below
+        ibm_key_credjson: <input the value from data[.dockerconfigjson]>
+        ldap_admin_password: adminpassword
+        ldap_base_dn: dc=alm,dc=com
+        ldap_bind_dn: cn=admin,dc=alm,dc=com
+        ldap_password_attr: userPassword
+        ldap_url: ldap://openldap.default.svc.cluster.local:389
+        ldap_user_search_base: ou=people
+        ldap_user_search_filter: uid={0}
+        role_name: cp4na_operator_install
