@@ -1,3 +1,13 @@
+---
+apiVersion: v1
+data:
+  .dockerconfigjson: {{ docker_json }}
+kind: Secret
+type: kubernetes.io/dockerconfigjson
+metadata:
+  name: docker
+  namespace: default
+---
 # https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#define-the-key-to-use-when-creating-a-configmap-from-a-file
 apiVersion: v1
 data:

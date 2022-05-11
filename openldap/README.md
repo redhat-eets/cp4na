@@ -5,9 +5,11 @@ A docker secret needs to be created to pull images (`osixia/openldap:stable` & `
 
 Note 1: The secret name "docker" is referenced inside of the "ldap-app.yaml" file
 
-Note 2: Replace values inside <> with your actual docker account related values
+Note 2: Look for `{{ docker_json }}` in `ldap-app.yaml` and replace it with the `data[.dockerconfigjson]` from the below command output.
 
-    oc create secret docker-registry docker --docker-username=<docker-username> --docker-password=<docker-token> --docker-email=<email-associated-with-docker-account>
+    oc create secret docker-registry docker --docker-username=<docker-username> --docker-password=<docker-token> --docker-email=<email-associated-with-docker-account> --dry-run=client -o yaml
+
+Note 3: Change the value of the LDAP_ADMIN_PASSWORD field with a different value before creating the deployment.
 
 ## Creating LDAP deployment and LDAP NodePort service
 
