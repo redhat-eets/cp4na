@@ -4,7 +4,6 @@ apiVersion: v1
 kind: Namespace
 metadata:
  name: openshift-local-storage
-spec: {}
 ---
 #YAML Manifest to create the local-operator-group OperatorGroup resource
 
@@ -25,7 +24,7 @@ metadata:
  name: local-storage-operator
  namespace: openshift-local-storage
 spec:
- channel: "4.10"
+ channel: {{ channel_version }}
  installPlanApproval: Automatic
  name: local-storage-operator
  source: redhat-operators

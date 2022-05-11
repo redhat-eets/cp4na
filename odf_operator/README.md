@@ -1,6 +1,20 @@
 ## General Notes
-These YAML files represent the installation files to setup/install OpenShift Data Foundation 4.10 operator and its storage cluster instance on an existing OCP 4.10 cluster. Certain storage parameters have been fine-tuned to suit the requirements of the IBM CP4NA operator. 
-The YAML files were created by referring the installation guide [here](https://access.redhat.com/articles/5692201).
+These YAML files represent the installation files to setup/install OpenShift Data Foundation 4.9+ operator and its storage cluster instance on an existing OCP 4.x cluster. Certain storage parameters have been fine-tuned to suit the requirements of the IBM CP4NA operator. 
+
+These files include the following:
+- Namespace, operator group and subscription creation for the local storage operator.
+- Worker node labelling for local volume discovery.
+- Local volume discovery creation.
+- Creation of local volume set.
+- Namespace, operator group and subscription creation for the ODF operator.
+- Creation of the storage system resource.
+- Creation of the storage cluster resource.
+- Default storage class setting.
+
+
+## Ansible Implementation
+These YAML files have been fine tuned to be referred and run within Ansible if the user decides to install the ODF operator using Ansible. Within these YAML files, there might be key values with the pattern `{{ variable_name }}` which are essentially values that are plugged in through Ansible. If the user wants to run and apply these files manually, replace the key value patters with appropriate values before running them. Users can also follow the installation guide [here](https://access.redhat.com/articles/5692201).
+
 
 ## Testing and Verification
 

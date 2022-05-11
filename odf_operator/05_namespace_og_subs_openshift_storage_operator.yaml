@@ -6,7 +6,6 @@ metadata:
  labels:
    openshift.io/cluster-monitoring: "true"
  name: openshift-storage
-spec: {}
 ---
 #YAML Manifest to create the openshift-storage-operatorgroup OperatorGroup
 
@@ -27,7 +26,7 @@ metadata:
  name: odf-operator
  namespace: openshift-storage
 spec:
- channel: "stable-4.10"
+ channel: {{ channel_version }}
  installPlanApproval: Automatic
  name: odf-operator
  source: redhat-operators

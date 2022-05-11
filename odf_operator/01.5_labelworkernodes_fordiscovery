@@ -1,3 +1,0 @@
-# Use the following command to add the 'ocs' label to each of the OpenShift Container Platform nodes that have storage devices and that are to be used to create PVs. The ODF operator recognizes the nodes which are to be used for its operation by looking for this label.
-
-oc label node <NodeName> cluster.ocs.openshift.io/openshift-storage=''
