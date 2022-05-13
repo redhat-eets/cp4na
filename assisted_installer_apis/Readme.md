@@ -88,7 +88,7 @@ Retrieves the list of OpenShift clusters installed using the Assisted Installer.
 |Request Body         |None|
 
 ### **Create Cluster Definition Request**
-This request creates a new cluster definition which in effect is the first step in creating an OCP cluster. In the AI UI, it will be seen as a draft after this request is done.
+This request creates a new cluster definition which in effect is the first step in creating an OCP cluster. In the AI UI, it will be seen as a draft after this request is done.(NOTE: below is example of creating HA cluster, for SNO clusters include `"high_availability_mode": "None"` in the Request Body.)
 |                |                        |
 |----------------|-------------------------------|
 |Request Type          |POST|
