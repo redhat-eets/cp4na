@@ -5,6 +5,9 @@
     enabled: no
     state:   stopped
 
+- name: reboot machine unconditionally after disabling libvirtd to remove the associated interfaces
+  reboot:
+
 - name: Re-create a container with systemd service file generated in '{{ system_path}}'
   containers.podman.podman_container:
     cap_add: '{{ cap_add_list }}'
