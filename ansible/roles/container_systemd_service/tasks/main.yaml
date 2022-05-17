@@ -5,7 +5,7 @@
     enabled: no
     state:   stopped
 
-- name: Re-create a container with systemd service file generated in /etc/systemd/system/
+- name: Re-create a container with systemd service file generated in '{{ system_path}}'
   containers.podman.podman_container:
     cap_add: '{{ cap_add_list }}'
     name: '{{ svc_name }}'
@@ -16,7 +16,7 @@
     net: '{{ network_mode }}'
     volumes: '{{ volumes_list }}'
     generate_systemd:
-      path: /etc/systemd/system/
+      path: '{{ system_path}}'
       restart_policy: '{{ restart_policy }}'
       time: 120
       new: true

@@ -45,5 +45,6 @@
         network_mode:
           - host
         svc_name: dnss
+        system_path: /etc/systemd/system/
         volumes_list:
           - /etc/dnsmasq/:/opt/dnsmasq/:Z
