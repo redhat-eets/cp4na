@@ -1,0 +1,8 @@
+---
+- name: assign ip address
+  community.general.nmcli:
+    conn_name: '{{ if_name }}'
+    ifname: '{{ if_name }}'
+    type: ethernet
+    state: present
+    ip4 : '{{ ip4_address }}'

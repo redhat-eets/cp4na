@@ -1,0 +1,4 @@
+- name: installing "{{ pkg }}"
+  ansible.builtin.package:
+    name: "{{ pkg }}"
+    state: latest

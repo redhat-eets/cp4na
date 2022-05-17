@@ -1,0 +1,33 @@
+---
+- name: Stop and disable libvirtd service to prevent it starting a dnsmasq service as well
+  service:
+    name:    libvirtd
+    enabled: no
+    state:   stopped
+
+- name: Re-create a container with systemd service file generated in /etc/systemd/system/
+  containers.podman.podman_container:
+    cap_add: '{{ cap_add_list }}'
+    name: '{{ svc_name }}'
+    image: '{{ image }}'
+    command: '{{ command }}'
+    state: started
+    recreate: yes
+    net: '{{ network_mode }}'
+    volumes: '{{ volumes_list }}'
+    generate_systemd:
+      path: /etc/systemd/system/
+      restart_policy: '{{ restart_policy }}'
+      time: 120
+      new: true
+
+- name: Change file ownership, group and permissions
+  ansible.builtin.file:
+    path: "{{ system_path}}/container-{{ svc_name}}.service"
+    mode: '0777'
+
+- name: ensure the service is enabled and running
+  ansible.builtin.systemd:
+    enabled: yes
+    state: started
+    name: "container-{{ svc_name }}"

@@ -1,0 +1,49 @@
+---
+# This playbook
+# 1. Installs podman
+# 2. Pulls container image that runs dnsmasq
+# 3. Assigns IP address to an interface specified; the specified interface will listen to DHCP requests
+# 4. Creates the dnsmasq.conf file that will be used by dnsmasq
+# 5. Creates container with systemd file generated that allows dnsmasq container to run as a service across reboots
+# NOTE: Update values for the variables below before running the playbook
+- name: dhcp server setup playbook
+  hosts: "{{ target }}"
+  roles:
+    - role: install_packages
+      become: yes
+      vars:
+        pkg: podman
+    - role: container_images_pull
+      vars:
+        image_name: 4km3/dnsmasq
+        image_tag: 2.86-r0
+        registry_username:
+        registry_password:
+        registry_name: docker.io
+        registry_auth_file: /tmp/auth.json
+    - role: ip_address_assign
+      become: yes
+      vars:
+        if_name: eno12409
+        ip4_address: 172.168.40.6/24
+    - role: dhcp_config_file
+      become: yes
+      vars:
+        dhcp_conf_dir: /etc/dnsmasq/
+        dhcp_conf_file: dnsmasq.conf
+        dhcp_range: 172.168.40.50,172.168.40.150,12h
+        listening_interface_ip_address: 172.168.40.6
+        listening_interface_name: eno12409
+    - role: container_systemd_service
+      become: yes
+      vars:
+        cap_add_list:
+          - NET_ADMIN
+        command: -q --conf-file=/opt/dnsmasq/dnsmasq.conf --dhcp-broadcast --log-facility=- -k
+        image: 4km3/dnsmasq:2.86-r0
+        restart_policy: on-failure
+        network_mode:
+          - host
+        svc_name: dnss
+        volumes_list:
+          - /etc/dnsmasq/:/opt/dnsmasq/:Z

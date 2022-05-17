@@ -1,0 +1,18 @@
+---
+- name: Login to registry and create "{{ registry_auth_file }}"
+  containers.podman.podman_login:
+    username: '{{ registry_username }}'
+    password: '{{ registry_password }}'
+    registry: '{{ registry_name }}'
+    authfile: '{{ registry_auth_file }}'
+
+- name: pull the '{{ image_name }}':'{{ image_tag }}' image
+  containers.podman.podman_image:
+    name: '{{ image_name }}'
+    tag: '{{ image_tag }}'
+    auth_file: '{{ registry_auth_file }}'
+
+- name: remove the auth file
+  ansible.builtin.file:
+    path: '{{ registry_auth_file }}'
+    state: absent
