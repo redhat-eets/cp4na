@@ -1,0 +1,26 @@
+---
+- name: assisted installer on-premise setup playbook
+  hosts: "{{ target }}"
+  roles:
+    - role: install_packages
+      become: yes
+      vars:
+        pkg: podman
+    - role: podman_login
+      vars:
+        registry_username: 
+        registry_password: 
+        registry_name: docker.io
+        registry_auth_file: /tmp/auth.json
+    - role: ai_onprem_systemd_svc
+      become: yes
+      vars:
+        ai_setup_dir: /home/ai_onprem_yaml_files/
+        ai_file_tag: v2.5.0
+        svc_base_url: 
+        svc_name: assisted-installer
+        system_path: /etc/systemd/system/
+    - role: delete_file
+      vars:
+        registry_auth_file: /tmp/auth.json
+

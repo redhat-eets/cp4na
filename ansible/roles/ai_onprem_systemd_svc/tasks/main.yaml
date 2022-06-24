@@ -1,0 +1,69 @@
+---
+- name: create the {{ ai_setup_dir }} directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ ai_setup_dir }}"
+    state: directory
+    mode: '0755'
+
+
+- name: Download creation of config map and pod resource yaml manifest files template from github repo
+  ansible.builtin.get_url:
+    url: "{{ item.url }}"
+    dest: "{{ ai_setup_dir }}/{{ item.name }}"
+    mode: '0664'
+  loop:
+    - { url: "https://raw.githubusercontent.com/openshift/assisted-service/{{ ai_file_tag }}/deploy/podman/configmap.yml", name: configmap.yaml }
+    - { url: "https://raw.githubusercontent.com/openshift/assisted-service/{{ ai_file_tag }}/deploy/podman/pod-persistent.yml", name: pod-persistent.yaml }
+
+
+- name: Replace line in file with template placeholder
+  ansible.builtin.lineinfile:
+    path: "{{ ai_setup_dir }}/{{ item.src }}"
+    regexp: "{{ item.exp }}"
+    line: "  {{ item.key }}{{ item.value }}"
+    backrefs: yes
+  loop:
+    - { src: configmap.yaml, exp: '(\s+)IMAGE_SERVICE_BASE_URL:', key: "IMAGE_SERVICE_BASE_URL: ", value: "http://{{ svc_base_url }}:8888" }
+    - { src: configmap.yaml, exp: '(\s+)SERVICE_BASE_URL:', key: "SERVICE_BASE_URL: ", value: "http://{{ svc_base_url }}:8090" }
+
+
+
+- name: Start the assisted installer service with kubernetes manifest files generated in '{{ ai_setup_dir }}'
+  containers.podman.podman_play:
+    kube_file: '{{ ai_setup_dir }}/pod-persistent.yaml'
+    configmap: '{{ ai_setup_dir }}/configmap.yaml'
+    state: started
+    recreate: yes
+
+
+- name: Make the assisted installer service a systemd service
+  command: "podman generate systemd --files --name {{ svc_name }}"
+  args:
+    chdir: "{{ system_path }}"
+
+
+- name: Change file ownership, group and permissions for the AI service systemd files 
+  ansible.builtin.file:
+    path: "{{ system_path }}/pod-{{ svc_name }}.service"
+    mode: '0777'
+
+
+- name: Re-execute systemd daemon for new config changes
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+
+
+- name: Ensure that the the assisted installer on-prem service is enabled
+  ansible.builtin.systemd:
+    enabled: yes
+    state: started
+    name: "pod-{{ svc_name }}"
+
+
+
+- name: Start the assisted installer on-prem service
+  ansible.builtin.systemd:
+    name: "pod-{{ svc_name }}"
+    state: started
+

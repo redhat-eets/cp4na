@@ -1,0 +1,5 @@
+---
+- name: remove the auth file
+  ansible.builtin.file:
+    path: '{{ registry_auth_file }}'
+    state: absent
